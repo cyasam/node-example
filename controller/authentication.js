@@ -1,11 +1,12 @@
 const User = require('../models/users');
-const jtw = require('jwt-simple');
+const jwt = require('jsonwebtoken');
 const config = require('../config');
 
 const authHelpers = {
     createToken: function(user){
-        const timestamp = new Date().getTime;
-        return jtw.encode({ sub: user.id, iat: timestamp }, config.secret );
+        const timestamp = new Date().getTime();
+        console.log(timestamp);
+        return jwt.sign({ sub: user.id }, config.secret, { expiresIn: 0.2 * 60 } );
     }
 };
 

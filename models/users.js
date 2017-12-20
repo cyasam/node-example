@@ -12,7 +12,7 @@ userSchema.pre('save', function(next){
     const user = this;
 
     bcrypt.genSalt(10, (err, salt) => {
-        if(err){ return next(err); }
+        if(err) { return next(err); }
         
         bcrypt.hash(user.password, salt, null, (err, hash) => {
             if(err){ return next(err); }
@@ -24,9 +24,10 @@ userSchema.pre('save', function(next){
     });
 });
 
-userSchema.methods.comparePassword = function(candidiatePassword, callback){
-    bcrypt.compare(candidiatePassword, this.password, (err, isMatch) => {
+userSchema.methods.comparePassword = function(submittedPassword, callback){
+    bcrypt.compare(submittedPassword, this.password, (err, isMatch) => {
         if(err) { return callback(err); }
+        if(!isMatch) { return callback(null, false); }
 
         callback(null, isMatch);
     });
