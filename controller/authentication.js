@@ -1,4 +1,13 @@
 const User = require('../models/users');
+const jtw = require('jwt-simple');
+const config = require('../config');
+
+const authHelpers = {
+    createToken: function(user){
+        const timestamp = new Date().getTime;
+        return jtw.encode({ sub: user.id, iat: timestamp }, config.secret );
+    }
+};
 
 const auth = {
     signup: function(req,res,next){
@@ -12,7 +21,7 @@ const auth = {
         const query = User.findOne({ email })
         const promise = query.exec();
 
-        promise.then(function(findingEmail){
+        promise.then(findingEmail => {
 
             if(findingEmail) { 
                 return res.status(422).send({ error: 'Email is in use'});
@@ -23,33 +32,18 @@ const auth = {
                 password
             });
             
-            user.save(function(err){
+            user.save(err => {
                 if(err) { return next(err); }
 
-                res.send({ success: true });
+                res.send({ token: authHelpers.createToken(user) });
             });
 
-        }).catch(function(err){
+        }).catch(err => {
             return next(err);
         });
     },
     login: function(req,res,next){
-        const email = req.body.email;
-        const password = req.body.password;
-
-        const query = User.findOne({email,password});
-        const promise = query.exec();
-
-        promise.then(function(findingUser){
-            if(!findingUser) {
-                return res.status(401).send({ success: false });
-            }
-            
-            res.send({ success: true });
-
-        }).catch(function(err){
-            return next(err);
-        });
+        res.send({ token: authHelpers.createToken(req.user)});
     }
 }
 
