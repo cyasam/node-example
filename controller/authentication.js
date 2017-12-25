@@ -6,7 +6,7 @@ const authHelpers = {
     createToken: function(user){
         const timestamp = new Date().getTime();
         console.log(timestamp);
-        return jwt.sign({ sub: user.id }, config.secret, { expiresIn: 0.2 * 60 } );
+        return jwt.sign({ sub: user.id }, config.secret, { expiresIn: 60 } );
     }
 };
 
@@ -44,7 +44,7 @@ const auth = {
         });
     },
     login: function(req,res,next){
-        res.send({ token: authHelpers.createToken(req.user)});
+        return res.send({ token: authHelpers.createToken(req.user)});
     }
 }
 

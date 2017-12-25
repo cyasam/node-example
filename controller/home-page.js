@@ -1,5 +1,5 @@
 const mainPageRoute = (req,res) => {
-    res.send({ message: 'Hi there' });
+    res.send({ message: 'Super secret information is Secret Key.' });
 };
 
 module.exports = mainPageRoute;
