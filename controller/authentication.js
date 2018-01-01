@@ -5,7 +5,6 @@ const config = require('../config');
 const authHelpers = {
     createToken: function(user){
         const timestamp = new Date().getTime();
-        console.log(timestamp);
         return jwt.sign({ sub: user.id }, config.secret, { expiresIn: 60 * 60 } );
     }
 };

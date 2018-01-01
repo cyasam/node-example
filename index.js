@@ -5,12 +5,11 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const router = require('./router');
 const cors = require('cors');
+const config = require('./config');
 const app = express();
 
 // DB Setup
-mongoose.connect('mongodb://18.195.181.182/node-example', {
-    useMongoClient: true
-});
+config.serverConnect();
 
 // App Setup
 app.use(cors());
